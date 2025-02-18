@@ -9,6 +9,6 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(Box main.cpp Entry.cpp Boxes.cpp)
+add_executable(ui main.cpp ResourceViewUI.cpp ResourceManager.cpp Resource.cpp MenuBarUI.cpp)
 
-target_link_libraries(Box Qt5::Widgets)
+target_link_libraries(ui Qt5::Widgets)

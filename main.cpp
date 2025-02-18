@@ -1,27 +1,31 @@
 #include <QApplication>
-#include <QWidget>
 #include <QVBoxLayout>
-#include <QPushButton>
-#include "Boxes.h"
+#include <QWidget>
+#include "MenuBarUI.h"
+#include "ResourceViewUI.h"
+#include "ResourceManager.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
-    QWidget mainWindow;
+    ResourceManager resourceManager;
+    resourceManager.createTestData();
 
-    Box *box1 = new Box("Folder 1", &mainWindow);
-    Box *box2 = new Box("Folder 2", &mainWindow);
-    Box *box3 = new Box("Folder 3", &mainWindow);    
-    // 布局
-    QVBoxLayout *layout = new QVBoxLayout(&mainWindow);
-    layout->addWidget(box1);
-    layout->addWidget(box2);
-    layout->addWidget(box3);
+    QWidget mainWidget;
+    QVBoxLayout *layout = new QVBoxLayout(&mainWidget);
 
-    mainWindow.setLayout(layout);
-    mainWindow.setWindowTitle("Box Application");
-    mainWindow.resize(400, 600);
-    mainWindow.show();
+    ResourceViewUI *resourceView = new ResourceViewUI(&resourceManager);
+    MenuBarUI *menuBar = new MenuBarUI();
 
+    // 📌 连接 `MenuBarUI` 的信号到 `ResourceManager` 的 `slots`
+    QObject::connect(menuBar, &MenuBarUI::addResource, &resourceManager, &ResourceManager::addResource);
+    QObject::connect(menuBar, &MenuBarUI::deleteResource, &resourceManager, &ResourceManager::deleteResource);
+    QObject::connect(menuBar, &MenuBarUI::renameResource, &resourceManager, &ResourceManager::renameResource);
+    QObject::connect(menuBar, &MenuBarUI::sortResources, &resourceManager, &ResourceManager::sortResources);
+
+    layout->addWidget(menuBar);
+    layout->addWidget(resourceView);
+
+    mainWidget.show();
     return app.exec();
 }
