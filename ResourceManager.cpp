@@ -1,9 +1,10 @@
 #include "ResourceManager.h"
+#include "iostream"
 
 ResourceManager::ResourceManager(QObject *parent) : QObject(parent) {}
 
-void ResourceManager::addResource(Resource *parent, const QString &name, const QString &tag) {
-    Resource *newResource = new Resource(name, tag, parent);
+void ResourceManager::addResource(Resource *parent, const QString &name, const ResourceType type) {
+    Resource *newResource = new Resource(name, type, parent);
     if (parent) {
         parent->addChild(newResource);
     } else {
@@ -29,15 +30,12 @@ void ResourceManager::renameResource(Resource *resource, const QString &newName)
     }
 }
 
-void ResourceManager::sortResources(const QString &criteria, bool ascending) {
-    auto compare = [criteria, ascending](Resource *a, Resource *b) {
-        if (criteria == "name")
-            return ascending ? a->getName() < b->getName() : a->getName() > b->getName();
-        else
-            return ascending ? a->getTag() < b->getTag() : a->getTag() > b->getTag();
-    };
-
-    std::sort(rootResources.begin(), rootResources.end(), compare);
+void ResourceManager::sortResources(const QString &criteria, const QString &sortOrder) {
+    std::cout << "[TestReceiver::sortResources] Received criteria = "
+    << criteria.toStdString()
+    << ", order = "
+    << sortOrder.toStdString()
+    << std::endl;    
     emit resourceUpdated();
 }
 
@@ -46,11 +44,11 @@ QList<Resource *> ResourceManager::getRootResources() const {
 }
 
 void ResourceManager::createTestData() {
-    Resource *folder1 = new Resource("Folder A", "Folder");
-    Resource *folder2 = new Resource("Folder B", "Folder");
+    Resource *folder1 = new Resource("Folder A", TypeA);
+    Resource *folder2 = new Resource("Folder B", TypeB);
 
-    Resource *file1 = new Resource("File A1", "Type A", folder1);
-    Resource *file2 = new Resource("File B1", "Type B", folder2);
+    Resource *file1 = new Resource("File A1", TypeA, folder1);
+    Resource *file2 = new Resource("File B1", TypeB, folder2);
 
     folder1->addChild(file1);
     folder2->addChild(file2);

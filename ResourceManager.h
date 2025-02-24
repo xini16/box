@@ -12,10 +12,10 @@ public:
     QList<Resource *> getRootResources() const;
 
 public slots: 
-    void addResource(Resource *parent, const QString &name, const QString &tag);
+    void addResource(Resource *parent, const QString &name, const ResourceType type);
     void deleteResource(Resource *resource);
     void renameResource(Resource *resource, const QString &newName);
-    void sortResources(const QString &criteria, bool ascending);
+    void sortResources(const QString &criteria, const QString &sortOrder);
     void createTestData();
 
 signals:

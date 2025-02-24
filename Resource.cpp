@@ -1,7 +1,7 @@
 #include "Resource.h"
 
-Resource::Resource(const QString &name, const QString &tag, Resource *parent)
-    : name(name), tag(tag), parent(parent) {}
+Resource::Resource(const QString &name, const ResourceType type, Resource *parent)
+    : name(name), type(type), parent(parent) {}
 
 QString Resource::getName() const {
     return name;
@@ -9,6 +9,10 @@ QString Resource::getName() const {
 
 QString Resource::getTag() const {
     return tag;
+}
+
+ResourceType Resource::getType() const {
+    return type;
 }
 
 QList<Resource *> Resource::getChildren() const {
@@ -29,6 +33,10 @@ void Resource::setName(const QString &name) {
 
 void Resource::setTag(const QString &tag) {
     this->tag = tag;
+}
+
+void Resource::setType(ResourceType newType) {
+    type = newType;
 }
 
 void Resource::addChild(Resource *child) {

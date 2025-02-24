@@ -17,7 +17,7 @@ ResourceViewUI::ResourceViewUI(ResourceManager *resourceManager, QWidget *parent
 
     mainLayout->addWidget(resourceList);
     setLayout(mainLayout);
-
+    connect(resourceList, &QTreeWidget::itemClicked, this, &ResourceViewUI::onResourceSelected);
     connect(resourceManager, &ResourceManager::resourceUpdated, this, &ResourceViewUI::updateView);
     updateView();
 }
@@ -41,6 +41,16 @@ void ResourceViewUI::populateTree(QTreeWidgetItem *parentItem, Resource *resourc
         parentItem->addChild(childItem); 
 
         populateTree(childItem, child); 
+    }
+}
+
+
+void ResourceViewUI::onResourceSelected() {
+    if (resourceList->currentItem()) {
+        Resource *selectedResource = getResourceFromItem(resourceList->currentItem());
+        if (selectedResource) {
+            emit resourceSelected(selectedResource); // 发出选中资源的信号
+        }
     }
 }
 
